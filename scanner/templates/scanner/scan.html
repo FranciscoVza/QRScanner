@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escanear QR</title>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #reader {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Escanea un código QR</h1>
+        <div id="reader"></div>
+        <div id="result"></div>
+        <div class="loading" id="loading">Procesando...</div>
+    </div>
+    
+    <script>
+        // Crear instancia del escáner QR
+        const html5QrCode = new Html5Qrcode("reader");
+        const resultContainer = document.getElementById('result');
+        const loadingIndicator = document.getElementById('loading');
+        
+        // Opciones de configuración
+        const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+        
+        // Iniciar escáner
+        html5QrCode.start(
+            { facingMode: "environment" }, 
+            config, 
+            onScanSuccess
+        );
+        
+        // Función que se ejecuta cuando se detecta un QR
+        function onScanSuccess(decodedText, decodedResult) {
+            // Detener el escáner
+            html5QrCode.stop();
+            
+            // Mostrar indicador de carga
+            loadingIndicator.style.display = 'block';
+            
+            // Mostrar resultado
+            resultContainer.innerHTML = `<p>Código detectado: ${decodedText}</p>`;
+            resultContainer.style.display = 'block';
+            
+            // Enviar al backend
+            processQRCode(decodedText);
+        }
+        
+        // Función para enviar el contenido del QR al backend
+        function processQRCode(content) {
+            fetch('/api/scan-result/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ content: content })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultContainer.innerHTML += '<p>Error al procesar el código QR</p>';
+                loadingIndicator.style.display = 'none';
+            });
+        }
+        
+        // Función para obtener el token CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
