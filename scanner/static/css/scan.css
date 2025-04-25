@@ -21,3 +21,14 @@ body {
     text-align: center;
     margin-top: 20px;
 }
+
+/*Tamaño de la "camara"*/
+.reader-wrapper {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+#reader {
+    width: 100%;
+    aspect-ratio: 1; /* Mantiene forma cuadrada */
+}
