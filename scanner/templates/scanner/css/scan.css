@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+#reader {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+#result {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: none;
+}
+.loading {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
