@@ -21,7 +21,7 @@
     </div>
     
     <script>
-        // Crear instancia del escáner QR
+        // Crear instancia del scaner
         const html5QrCode = new Html5Qrcode("reader");
         const resultContainer = document.getElementById('result');
         const loadingIndicator = document.getElementById('loading');
@@ -29,16 +29,16 @@
         // Opciones de configuración
         const config = { fps: 10, qrbox: { width: 250, height: 250 } };
         
-        // Iniciar escáner
+        // Iniciar scaner
         html5QrCode.start(
             { facingMode: "environment" }, 
             config, 
             onScanSuccess
         );
         
-        // Función que se ejecuta cuando se detecta un QR
+        // Funcion que ejecuta cuando se detecta el QR
         function onScanSuccess(decodedText, decodedResult) {
-            // Detener el escáner
+            // Detener el scaner
             html5QrCode.stop();
             
             // Mostrar indicador de carga

@@ -15,13 +15,13 @@ def scan_qr(request):
     return render(request, 'scanner/scan.html')
 
 def scan_result(request, qr_id):
-    """Muestra el resultado del escaneo de un QR"""
+    """Muestra el resultado del scaneo de un QR"""
     qr_code = get_object_or_404(QRCode, id=qr_id)
     return render(request, 'scanner/scan_result.html', {'qr_code': qr_code})
 
 @api_view(['POST'])
 def process_qr_scan(request):
-    """API para procesar el contenido de un QR escaneado"""
+    """API para procesar el contenido de un QR scaneo"""
     # Obtener datos del request
     data = request.data
     
@@ -32,7 +32,7 @@ def process_qr_scan(request):
     # Buscar o crear un QR Code basado en el contenido
     qr_code, created = QRCode.objects.get_or_create(content=data['content'])
     
-    # Registrar el escaneo
+    # Registrar el scaneo
     scan = QRScan(
         qr_code=qr_code,
         user_agent=request.META.get('HTTP_USER_AGENT', ''),
