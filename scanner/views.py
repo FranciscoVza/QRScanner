@@ -10,6 +10,12 @@ def index(request):
     """Página principal con interfaz para escanear QR"""
     return render(request, 'scanner/index.html')
 
+def qr_codes_list(request):
+    """Vista para mostrar la lista de códigos QR en una tabla"""
+    qr_codes = QRCode.objects.all()
+    return render(request, 'scanner/qr_codes_list.html', {'qr_codes': qr_codes})
+
+
 def scan_qr(request):
     """Página con el escáner de QR usando la cámara del teléfono"""
     return render(request, 'scanner/scan.html')

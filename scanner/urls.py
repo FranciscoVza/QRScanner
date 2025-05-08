@@ -6,4 +6,5 @@ urlpatterns = [
     path('scan/', views.scan_qr, name='scan_qr'),
     path('api/scan-result/', views.process_qr_scan, name='process_qr_scan'),
     path('scan-result/<uuid:qr_id>/', views.scan_result, name='scan_result'),
+    path('qr-codes/', views.qr_codes_list, name='qr_codes_list'),
 ]
